@@ -11,12 +11,15 @@ export default class Todo extends Component {
     constructor(props) {
         super(props)
         this.state = { description: '', list: [] }
+        
         this.handleChange = this.handleChange.bind(this)
         this.handleAdd = this.handleAdd.bind(this)
-        this.handleRemove = this.handleRemove.bind(this)
+        this.handleSearch = this.handleSearch.bind(this)
+        this.handleClear = this.handleClear.bind(this)
+        
         this.handleMarkAsDone = this.handleMarkAsDone.bind(this)
         this.handleMarkAsPending = this.handleMarkAsPending.bind(this)
-        this.handleSearch = this.handleSearch.bind(this)
+        this.handleRemove = this.handleRemove.bind(this)
         
         this.refresh = this.refresh.bind(this)
 
@@ -39,6 +42,14 @@ export default class Todo extends Component {
             .then(resp => this.refresh())
     }
 
+    handleSearch() {
+        this.refresh(this.state.description)
+    }
+
+    handleClear() {
+        this.refresh()
+    }
+    
     handleRemove(todo) {
         axios.delete(`${URL}/${todo._id}`)
             .then(resp => this.refresh(this.state.description))
@@ -54,10 +65,6 @@ export default class Todo extends Component {
             .then(resp => this.refresh(this.state.description))
     }
 
-    handleSearch() {
-        this.refresh(this.state.description)
-    }
-
     render() {
         return (
             <div>
@@ -66,7 +73,8 @@ export default class Todo extends Component {
                     description={this.state.description} 
                     handleChange={this.handleChange} 
                     handleAdd={this.handleAdd}
-                    handleSearch={this.handleSearch} />
+                    handleSearch={this.handleSearch}
+                    handleClear={this.handleClear} />
                 
                 <TodoList 
                     list={this.state.list} 
